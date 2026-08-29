@@ -1,34 +1,61 @@
-import datetime
-
 from django.db import models
 
-# Create your models here.
-class User(models.Model):
-    username = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
-    email = models.EmailField()
-    accessibility = models.IntegerField(default=0)
-    def __str__(self):
-        return self.username
+
+
+class Packages(models.Model):
+
+    package_name = models.CharField(max_length=100)
+    package_description = models.TextField(default="")
+    package_price = models.FloatField(default=0)
+    package_usage = models.IntegerField(default=0) # how many users have this package right now!
+    deleted = models.BooleanField(default=False)
     class Meta:
-        db_table = 'users'
-        verbose_name = 'users'
-        ordering = ['username']
-        unique_together = (('username', 'email'),)
+        db_table = 'packages'
+        verbose_name = 'packages'
+        verbose_name_plural = 'packages'
+        unique = 'package_name'
 
-class UserInformations(models.Model):
-    name = models.CharField(max_length=100)
-    surname = models.CharField(max_length=100)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    current_assets = models.JSONField(default=dict)
-    risk_group = models.ForeignKey('risk_groups', on_delete=models.CASCADE)
-    risk_score = models.IntegerField(default=1)
-    joining_date = models.DateField(default=datetime.date.today)
-    subscription_end_date = models.DateField(default=0)
-    package_assigned = models.ForeignKey('Packages', on_delete=models.CASCADE)
-
-
-    def __str__(self):
-        return self.name
+class RiskGroups(models.Model):
+    class RiskFactors(models.TextChoices):
+        LOW_RISK = 'LOW_RISK'
+        MODERATE = 'MODERATE'
+        HIGH_RISK = 'HIGH_RISK'
+    risk_group_name = models.CharField(max_length=100)
+    risk_group_description = models.TextField(default="")
+    risk_factor = models.CharField(choices=RiskFactors.choices)
+    deleted = models.BooleanField(default=False)
     class Meta:
-        db_table = 'user_informations'
+        db_table = 'risk_groups'
+        verbose_name = 'risk_groups'
+        verbose_name_plural = 'risk_groups'
+        unique = 'risk_group_name'
+
+class AcceptedAssets(models.Model):
+    asset_name = models.CharField(max_length=100)
+    asset_group_id = models.ForeignKey(AcceptedAssetGroup)
+    asset_description = models.TextField(default="")
+    risk_score = models.IntegerField(default=0)
+    risk_group_id = models.ForeignKey(RiskGroups, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted = models.BooleanField(default=False)
+    class Meta:
+        db_table = 'accepted_assets'
+        verbose_name = 'accepted_assets'
+        verbose_name_plural = 'accepted_assets'
+        unique = 'asset_name'
+
+class AcceptedAssetGroup(models.Model):
+    asset_group_name = models.CharField(max_length=100)
+    asset_group_description = models.TextField(default="")
+    asset_group_member_count = models.IntegerField(default=0)
+    risk_factor = models.ForeignKey(RiskGroups.risk_factor, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted = models.BooleanField(default=False)
+    class Meta:
+        db_table = 'asset_groups'
+        verbose_name = 'asset_groups'
+        unique = 'asset_group_name'
+
+
