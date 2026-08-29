@@ -7,15 +7,9 @@ from core.models import Packages, RiskGroups
 class User(AbstractUser):
     accessibility = models.IntegerField(default=0)
 
-
-    def __str__(self):
-        return self.username
-
     class Meta:
         db_table = 'users'
         verbose_name = 'users'
-        ordering = ['username']
-        unique_together = ('username', 'email')
 
 class UserInformation(models.Model):
     name = models.CharField(max_length=100)
@@ -26,7 +20,8 @@ class UserInformation(models.Model):
     risk_score = models.IntegerField(default=1)
     joining_date = models.DateField(default=datetime.date.today)
     subscription_end_date = models.DateField(null=True, blank=True)
-    package_assigned = models.ForeignKey(Packages, on_delete=models.CASCADE)
+    package_assigned = models.ForeignKey(Packages, on_delete=models.CASCADE,
+                                         null=True, blank=True)
     created_at = models.DateField(default=datetime.date.today)
     updated_at = models.DateField(auto_now=True)
     deleted = models.BooleanField(default=False)
@@ -34,7 +29,7 @@ class UserInformation(models.Model):
     def __str__(self):
         return self.name
     class Meta:
-        db_table = 'user_informations'
-        verbose_name = 'user_informations'
+        db_table = 'UserInformation'
+        verbose_name = 'UserInformation'
 
 

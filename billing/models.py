@@ -2,7 +2,7 @@ import datetime
 
 from django.db import models
 
-from accounts.models import Users
+from accounts.models import User
 from core.models import Packages
 
 
@@ -12,12 +12,13 @@ class UserPayments(models.Model):
         COMPLETED = 'COMPLETED'
         FAILED = 'FAILED'
 
-    user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
-    package_id = models.ForeignKey(Packages, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    package = models.ForeignKey(Packages, on_delete=models.CASCADE)
     status = models.CharField(
         choices=PaymentStatus.choices,
     )
     created_at = models.DateField(default=datetime.date.today)
+    updated_at = models.DateField(auto_now=True)
     deleted = models.BooleanField(default=False)
 
     class Meta:

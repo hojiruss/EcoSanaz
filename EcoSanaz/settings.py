@@ -37,6 +37,7 @@ AUTH_USER_MODEL = 'accounts.User'
 INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'accounts.apps.AccountsConfig',
+    'billing.apps.BillingConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
