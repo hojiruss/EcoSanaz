@@ -5,7 +5,10 @@ from core.models import Packages, RiskGroups
 
 
 class User(AbstractUser):
+    email = models.EmailField(unique=True)
     accessibility = models.IntegerField(default=0)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
 
     class Meta:
         db_table = 'users'
@@ -29,7 +32,7 @@ class UserInformation(models.Model):
     def __str__(self):
         return self.name
     class Meta:
-        db_table = 'UserInformation'
-        verbose_name = 'UserInformation'
+        db_table = 'user_information'
+        verbose_name = 'user_information'
 
 
