@@ -1,18 +1,12 @@
 import datetime
-
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from core.models import Packages, RiskGroups
 
 
-# Create your models here.
-class Users(models.Model):
-    username = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
-    email = models.EmailField()
+class User(AbstractUser):
     accessibility = models.IntegerField(default=0)
-    created_at = models.DateField(default=datetime.date.today)
-    updated_at = models.DateField(default = 0)
-    deleted = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.username
@@ -26,39 +20,21 @@ class Users(models.Model):
 class UserInformation(models.Model):
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
-    user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     current_assets = models.JSONField(default=dict)
     risk_group = models.ForeignKey(RiskGroups, on_delete=models.CASCADE)
     risk_score = models.IntegerField(default=1)
     joining_date = models.DateField(default=datetime.date.today)
-    subscription_end_date = models.DateField(default=0)
+    subscription_end_date = models.DateField(null=True, blank=True)
     package_assigned = models.ForeignKey(Packages, on_delete=models.CASCADE)
     created_at = models.DateField(default=datetime.date.today)
-    updated_at = models.DateField(default = 0)
+    updated_at = models.DateField(auto_now=True)
     deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
-    class meta:
+    class Meta:
         db_table = 'user_informations'
         verbose_name = 'user_informations'
 
 
-class UserPayments(models.Model):
-    class PaymentStatus(models.TextChoices):
-        PROCESSING = 'PROCESSING'
-        COMPLETED = 'COMPLETED'
-        FAILED = 'FAILED'
-
-    user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
-    package_id = models.ForeignKey(Packages, on_delete=models.CASCADE)
-    status = models.CharField(
-        choices=PaymentStatus.choices,
-    )
-    created_at = models.DateField(default=datetime.date.today)
-    deleted = models.BooleanField(default=False)
-
-    class Meta:
-        db_table = 'user_payments'
-        verbose_name = 'user_payments'
-        ordering = ['created_at']
