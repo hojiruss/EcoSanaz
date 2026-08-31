@@ -54,5 +54,10 @@ class AcceptedAssets(models.Model):
         verbose_name_plural = 'accepted_assets'
 
 
+class Risks(models.Model):
+    risk_name = models.CharField(max_length=100,unique=True)
+    risk_description = models.TextField(default="")
+
+
 
 
