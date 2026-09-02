@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import AboutItem,FAQItem
 
-# Register your models here.
+
+admin.site.register(AboutItem)
+admin.site.register(FAQItem)

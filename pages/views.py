@@ -1,11 +1,23 @@
-from django.views.generic import TemplateView
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
+class HomeView(APIView):
+    def get(self, request):
+        return Response({
+            'title': 'Home Page',
+            'description': 'This is the home page',
+        })
 
-class HomeView(TemplateView):
-    template_name = 'pages/home.html'
+class AboutView(APIView):
+    def get(self, request):
+        return Response({
+            'title': 'About Page',
+            'description': 'This is the about the website',
+        })
 
-class AboutView(TemplateView):
-    template_name = 'pages/about.html'
-
-class FAQView(TemplateView):
-    template_name = 'pages/faq.html'
+class FAQView(APIView):
+    def get(self, request):
+        return Response({
+            'title': 'Contact Page',
+            'description': 'This is the contact page',
+        })

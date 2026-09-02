@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'billing.apps.BillingConfig',
     'pages.apps.PagesConfig',
+    'portfolio.apps.PortfolioConfig',
     'rest_framework',
     'corsheaders',
     'django.contrib.admin',
@@ -60,7 +61,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOW_ORIGINS = [
+CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
 
@@ -90,7 +91,7 @@ WSGI_APPLICATION = 'EcoSanaz.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ECOSANAZMAINDB',
+        'NAME': os.getenv('DATABASE_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
