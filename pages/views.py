@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
+from .models import AboutItem,FAQItem
 class HomeView(APIView):
     def get(self, request):
         return Response({
@@ -10,14 +10,15 @@ class HomeView(APIView):
 
 class AboutView(APIView):
     def get(self, request):
+        about = AboutItem.objects.filter(deleted=False).first()
         return Response({
-            'title': 'About Page',
-            'description': 'This is the about the website',
+            'description': about.description if about else ''
         })
 
 class FAQView(APIView):
     def get(self, request):
+        items = FAQItem.objects.filter(deleted=False)
+        data = [{'question': i.question, 'answer': i.answer} for i in items]
         return Response({
-            'title': 'Contact Page',
-            'description': 'This is the contact page',
+            'items': data
         })
